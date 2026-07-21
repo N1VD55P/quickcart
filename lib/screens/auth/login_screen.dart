@@ -4,9 +4,6 @@ import 'package:quickcart/utils/validators.dart';
 import 'signup_screen.dart';
 import 'phone_auth_screen.dart';
 import '../shop/home_screen.dart';
-import 'package:quickcart/utils/password_helper.dart';
-import 'package:quickcart/models/user.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 
