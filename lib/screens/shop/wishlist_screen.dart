@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import '../../models/cart_item.dart';
+import '../../providers/Product_Provider.dart';
 import '../shop/home_screen.dart';
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
 
-  List<Product> _wishlistProducts() {
+  // Resolve wishlisted IDs against the in-memory product list
+  List<Product> _wishlistProducts(BuildContext context) {
     final wishBox = Hive.box<String>('wishlist');
-    final productBox = Hive.box<Product>('products');
-    final ids = wishBox.values.toList();
-    return productBox.values.where((p) => ids.contains(p.id)).toList();
+    final ids = wishBox.values.toSet();
+    final allProducts = context.read<ProductProvider>().products;
+    return allProducts.where((p) => ids.contains(p.id)).toList();
   }
 
   Future<void> _removeFromWishlist(String productId) async {
@@ -79,10 +82,12 @@ class WishlistScreen extends StatelessWidget {
         child: ValueListenableBuilder(
           valueListenable: Hive.box<String>('wishlist').listenable(),
           builder: (context, box, _) {
-            final items = _wishlistProducts();
+            // wishlist box changed → re-resolve against provider products
+            final items = _wishlistProducts(context);
 
             return Column(
               children: [
+                // ── Header ────────────────────────────────────────────
                 Container(
                   color: primaryBlue,
                   padding: const EdgeInsets.symmetric(
@@ -92,15 +97,11 @@ class WishlistScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
-                            ),
-                            (route) => false,
-                          );
-                        },
+                        onTap: () => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (_) => const HomeScreen()),
+                          (route) => false,
+                        ),
                         child: Container(
                           width: 36,
                           height: 36,
@@ -173,7 +174,7 @@ class WishlistScreen extends StatelessWidget {
       floatingActionButton: ValueListenableBuilder(
         valueListenable: Hive.box<String>('wishlist').listenable(),
         builder: (context, box, _) {
-          final items = _wishlistProducts();
+          final items = _wishlistProducts(context);
           final primaryBlue = Theme.of(context).colorScheme.primary;
           if (items.isEmpty) return const SizedBox.shrink();
           return FloatingActionButton.extended(
@@ -235,13 +236,11 @@ class WishlistScreen extends StatelessWidget {
               width: 200,
               height: 48,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => const HomeScreen()),
-                    (route) => false,
-                  );
-                },
+                onPressed: () => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomeScreen()),
+                  (route) => false,
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryBlue,
                   foregroundColor: Colors.white,
@@ -263,6 +262,7 @@ class WishlistScreen extends StatelessWidget {
   }
 }
 
+// ── Wishlist card (unchanged from original) ───────────────────────────────────
 class _WishlistCard extends StatefulWidget {
   final Product product;
   final VoidCallback onAddToCart;
@@ -326,7 +326,6 @@ class _WishlistCardState extends State<_WishlistCard>
     final priceGreen = isDark
         ? const Color(0xFF66BB6A)
         : const Color(0xFF2E7D32);
-
     final p = widget.product;
     final discount = _discountPercent;
 
