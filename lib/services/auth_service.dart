@@ -1,5 +1,4 @@
- import 'package:hive/hive.dart';
-
+import 'package:hive/hive.dart';
 import '../models/user.dart';
 import '../utils/password_helper.dart';
 
@@ -9,40 +8,28 @@ class AuthService {
   final Box settings = Hive.box('settings');
 
   bool signup(User user) {
-    bool exists = userBox.values.any(
-      (u) => u.email == user.email,
-    );
+    bool exists = userBox.values.any((u) => u.email == user.email);
 
     if (exists) {
       return false;
     }
 
-    user.passwordHash =
-        PasswordHelper.hashPassword(user.passwordHash);
+    user.passwordHash = PasswordHelper.hashPassword(user.passwordHash);
 
     userBox.add(user);
 
     return true;
   }
 
-  bool login(
-    String email,
-    String password,
-  ) {
-    final hashed =
-        PasswordHelper.hashPassword(password);
+  bool login(String email, String password) {
+    final hashed = PasswordHelper.hashPassword(password);
 
     try {
       final user = userBox.values.firstWhere(
-        (u) =>
-            u.email == email &&
-            u.passwordHash == hashed,
+        (u) => u.email == email && u.passwordHash == hashed,
       );
 
-      settings.put(
-        "currentUser",
-        user.email,
-      );
+      settings.put("currentUser", user.email);
 
       return true;
     } catch (_) {

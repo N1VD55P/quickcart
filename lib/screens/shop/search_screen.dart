@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import '../../models/product.dart';
+import '../../providers/Product_Provider.dart';
 import '../shop/product_detail_screen.dart';
 
 class SearchOverlay extends StatefulWidget {
   final VoidCallback onClose;
-
   const SearchOverlay({super.key, required this.onClose});
 
   @override
@@ -20,9 +20,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focus.requestFocus();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focus.requestFocus());
   }
 
   @override
@@ -32,10 +30,10 @@ class _SearchOverlayState extends State<SearchOverlay> {
     super.dispose();
   }
 
-  List<Product> _getResults(Box<Product> box) {
+  List<Product> _results(List<Product> allProducts) {
     if (_query.trim().isEmpty) return [];
     final q = _query.trim().toLowerCase();
-    return box.values.where((p) {
+    return allProducts.where((p) {
       return p.name.toLowerCase().contains(q) ||
           p.description.toLowerCase().contains(q) ||
           p.category.toLowerCase().contains(q);
@@ -77,23 +75,34 @@ class _SearchOverlayState extends State<SearchOverlay> {
     final greyText = Theme.of(context).colorScheme.onSurface.withAlpha(150);
     final cardWhite = Theme.of(context).cardColor;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final priceGreen =
-        isDark ? const Color(0xFF66BB6A) : const Color(0xFF2E7D32);
+    final priceGreen = isDark
+        ? const Color(0xFF66BB6A)
+        : const Color(0xFF2E7D32);
     const discountRed = Color(0xFFD32F2F);
+
+    // Products come from provider — already fetched, no loading needed here
+    final provider = context.watch<ProductProvider>();
+    final allProducts = provider.products;
+    final isLoading = provider.isLoading;
+    final results = _results(allProducts);
 
     return Material(
       color: bgColor,
       child: SafeArea(
         child: Column(
           children: [
+            // ── Search bar ──────────────────────────────────────────
             Container(
               color: cardWhite,
               padding: const EdgeInsets.fromLTRB(8, 10, 12, 10),
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back_ios_new_rounded,
-                        size: 20, color: darkText),
+                    icon: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 20,
+                      color: darkText,
+                    ),
                     onPressed: _close,
                   ),
                   Expanded(
@@ -114,13 +123,16 @@ class _SearchOverlayState extends State<SearchOverlay> {
                         ),
                         decoration: InputDecoration(
                           hintText: 'Search products…',
-                          hintStyle:
-                              TextStyle(color: greyText, fontSize: 14),
-                          prefixIcon: Icon(Icons.search_rounded,
-                              color: greyText, size: 20),
+                          hintStyle: TextStyle(color: greyText, fontSize: 14),
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            color: greyText,
+                            size: 20,
+                          ),
                           border: InputBorder.none,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                          ),
                         ),
                         onChanged: (v) => setState(() => _query = v),
                       ),
@@ -140,8 +152,11 @@ class _SearchOverlayState extends State<SearchOverlay> {
                           color: greyText.withAlpha(40),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(Icons.close_rounded,
-                            size: 16, color: greyText),
+                        child: Icon(
+                          Icons.close_rounded,
+                          size: 16,
+                          color: greyText,
+                        ),
                       ),
                     ),
                   ],
@@ -149,83 +164,76 @@ class _SearchOverlayState extends State<SearchOverlay> {
               ),
             ),
 
+            // ── Results ─────────────────────────────────────────────
             Expanded(
-              child: ValueListenableBuilder(
-                valueListenable:
-                    Hive.box<Product>('products').listenable(),
-                builder: (context, Box<Product> box, _) {
-                  if (_query.trim().isEmpty) {
-                    return _buildEmptyState(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _query.trim().isEmpty
+                  ? _buildEmptyState(
                       context: context,
                       icon: Icons.search_rounded,
                       title: 'Search QuickCart',
                       subtitle:
                           'Find products by name, category\nor description',
-                    );
-                  }
-                  final results = _getResults(box);
-                  if (results.isEmpty) {
-                    return _buildEmptyState(
+                    )
+                  : results.isEmpty
+                  ? _buildEmptyState(
                       context: context,
                       icon: Icons.search_off_rounded,
                       title: 'No results found',
                       subtitle:
                           'Try a different keyword\nor browse categories on Home',
-                    );
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                                fontSize: 14, color: greyText),
-                            children: [
-                              TextSpan(
-                                text: '${results.length} ',
-                                style: TextStyle(
-                                  color: primaryBlue,
-                                  fontWeight: FontWeight.w700,
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyle(fontSize: 14, color: greyText),
+                              children: [
+                                TextSpan(
+                                  text: '${results.length} ',
+                                  style: TextStyle(
+                                    color: primaryBlue,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                              const TextSpan(text: 'results for  "'),
-                              TextSpan(
-                                text: _query.trim(),
-                                style: TextStyle(
-                                  color: darkText,
-                                  fontWeight: FontWeight.w600,
+                                const TextSpan(text: 'results for  "'),
+                                TextSpan(
+                                  text: _query.trim(),
+                                  style: TextStyle(
+                                    color: darkText,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              const TextSpan(text: '"'),
-                            ],
+                                const TextSpan(text: '"'),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
-                          itemCount: results.length,
-                          itemBuilder: (context, index) =>
-                              _buildResultTile(
-                            results[index],
-                            primaryBlue: primaryBlue,
-                            darkText: darkText,
-                            greyText: greyText,
-                            bgColor: bgColor,
-                            cardWhite: cardWhite,
-                            priceGreen: priceGreen,
-                            discountRed: discountRed,
+                        Expanded(
+                          child: ListView.builder(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 4,
+                            ),
+                            itemCount: results.length,
+                            itemBuilder: (context, index) => _buildResultTile(
+                              results[index],
+                              primaryBlue: primaryBlue,
+                              darkText: darkText,
+                              greyText: greyText,
+                              bgColor: bgColor,
+                              cardWhite: cardWhite,
+                              priceGreen: priceGreen,
+                              discountRed: discountRed,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                      ],
+                    ),
             ),
           ],
         ),
@@ -242,7 +250,6 @@ class _SearchOverlayState extends State<SearchOverlay> {
     final primaryBlue = Theme.of(context).colorScheme.primary;
     final darkText = Theme.of(context).colorScheme.onSurface;
     final greyText = Theme.of(context).colorScheme.onSurface.withAlpha(150);
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -257,16 +264,20 @@ class _SearchOverlayState extends State<SearchOverlay> {
             child: Icon(icon, size: 36, color: primaryBlue.withAlpha(150)),
           ),
           const SizedBox(height: 16),
-          Text(title,
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: darkText)),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: darkText,
+            ),
+          ),
           const SizedBox(height: 6),
-          Text(subtitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 13, color: greyText, height: 1.5)),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 13, color: greyText, height: 1.5),
+          ),
         ],
       ),
     );
@@ -282,16 +293,17 @@ class _SearchOverlayState extends State<SearchOverlay> {
     required Color priceGreen,
     required Color discountRed,
   }) {
-    final discount =
-        _discountPercent(product.price, product.originalPrice);
+    final discount = _discountPercent(product.price, product.originalPrice);
     final icon = _categoryIcon(product.category);
+
     return GestureDetector(
       onTap: () {
         _focus.unfocus();
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => ProductDetailScreen(product: product)),
+            builder: (_) => ProductDetailScreen(product: product),
+          ),
         );
       },
       child: Container(
@@ -317,10 +329,28 @@ class _SearchOverlayState extends State<SearchOverlay> {
                 color: bgColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Center(
-                child: Icon(icon,
-                    size: 32, color: primaryBlue.withAlpha(120)),
-              ),
+              child: product.imageUrl.isNotEmpty
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        product.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Center(
+                          child: Icon(
+                            icon,
+                            size: 32,
+                            color: primaryBlue.withAlpha(120),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: Icon(
+                        icon,
+                        size: 32,
+                        color: primaryBlue.withAlpha(120),
+                      ),
+                    ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -329,7 +359,9 @@ class _SearchOverlayState extends State<SearchOverlay> {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 2),
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: primaryBlue.withAlpha(20),
                       borderRadius: BorderRadius.circular(4),
@@ -337,9 +369,10 @@ class _SearchOverlayState extends State<SearchOverlay> {
                     child: Text(
                       product.category,
                       style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: primaryBlue),
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: primaryBlue,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -348,10 +381,11 @@ class _SearchOverlayState extends State<SearchOverlay> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: darkText,
-                        height: 1.3),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: darkText,
+                      height: 1.3,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Row(
@@ -359,23 +393,27 @@ class _SearchOverlayState extends State<SearchOverlay> {
                       Text(
                         '₹${product.price.toStringAsFixed(0)}',
                         style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w800,
-                            color: priceGreen),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: priceGreen,
+                        ),
                       ),
                       const SizedBox(width: 6),
                       Text(
                         '₹${product.originalPrice.toStringAsFixed(0)}',
                         style: TextStyle(
-                            fontSize: 12,
-                            color: greyText,
-                            decoration: TextDecoration.lineThrough),
+                          fontSize: 12,
+                          color: greyText,
+                          decoration: TextDecoration.lineThrough,
+                        ),
                       ),
                       const SizedBox(width: 6),
                       if (discount > 0)
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: discountRed,
                             borderRadius: BorderRadius.circular(4),
@@ -383,9 +421,10 @@ class _SearchOverlayState extends State<SearchOverlay> {
                           child: Text(
                             '-$discount%',
                             style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700),
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                     ],
@@ -394,8 +433,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
               ),
             ),
             const SizedBox(width: 8),
-            Icon(Icons.arrow_forward_ios_rounded,
-                size: 14, color: greyText),
+            Icon(Icons.arrow_forward_ios_rounded, size: 14, color: greyText),
           ],
         ),
       ),

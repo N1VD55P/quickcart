@@ -1,10 +1,310 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import '../../../models/product.dart';
+import '../../../providers/Product_Provider.dart';
 import '../product_detail_screen.dart';
 
 const _discountRed = Color(0xFFD32F2F);
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Shimmer painter — draws a left-to-right gradient sweep over a base grey.
+// ─────────────────────────────────────────────────────────────────────────────
+class _ShimmerPainter extends CustomPainter {
+  _ShimmerPainter({
+    required this.progress,
+    required this.baseColor,
+    required this.highlightColor,
+  });
+
+  final double progress; // 0 → 1
+  final Color baseColor;
+  final Color highlightColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // The highlight band travels from -size.width to +2*size.width
+    final double bandCenter = -size.width + progress * size.width * 3;
+
+    final gradient = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [baseColor, baseColor, highlightColor, baseColor, baseColor],
+      stops: [
+        0.0,
+        (bandCenter - size.width * 0.3).clamp(0.0, 1.0) / size.width,
+        (bandCenter).clamp(0.0, size.width) / size.width,
+        (bandCenter + size.width * 0.3).clamp(0.0, size.width) / size.width,
+        1.0,
+      ],
+    );
+
+    final paint = Paint()
+      ..shader = gradient.createShader(
+        Rect.fromLTWH(0, 0, size.width, size.height),
+      );
+
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+  }
+
+  @override
+  bool shouldRepaint(_ShimmerPainter old) => old.progress != progress;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Shimmer container — wraps any child with the animated overlay via ClipRect.
+// ─────────────────────────────────────────────────────────────────────────────
+class _Shimmer extends StatefulWidget {
+  const _Shimmer({required this.child});
+  final Widget child;
+
+  @override
+  State<_Shimmer> createState() => _ShimmerState();
+}
+
+class _ShimmerState extends State<_Shimmer>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _anim;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
+    _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = isDark
+        ? const Color(0xFF2C2C2C)
+        : const Color(0xFFE0E0E0);
+    final highlightColor = isDark
+        ? const Color(0xFF3E3E3E)
+        : const Color(0xFFF5F5F5);
+
+    return AnimatedBuilder(
+      animation: _anim,
+      builder: (context, child) {
+        return ClipRect(
+          child: CustomPaint(
+            painter: _ShimmerPainter(
+              progress: _anim.value,
+              baseColor: baseColor,
+              highlightColor: highlightColor,
+            ),
+            child: child,
+          ),
+        );
+      },
+      child: widget.child,
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// A single skeleton card — mirrors the real card's layout exactly.
+// ─────────────────────────────────────────────────────────────────────────────
+class _SkeletonCard extends StatelessWidget {
+  const _SkeletonCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = isDark
+        ? const Color(0xFF2C2C2C)
+        : const Color(0xFFE0E0E0);
+    final cardWhite = Theme.of(context).cardColor;
+
+    Widget block({double? width, double? height, double radius = 6}) =>
+        Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: baseColor,
+            borderRadius: BorderRadius.circular(radius),
+          ),
+        );
+
+    return _Shimmer(
+      child: Container(
+        decoration: BoxDecoration(
+          color: cardWhite,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(18),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image placeholder
+            Container(
+              height: 130,
+              decoration: BoxDecoration(
+                color: baseColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title line 1
+                    block(width: double.infinity, height: 11),
+                    const SizedBox(height: 6),
+                    // Title line 2 (shorter)
+                    block(width: 100, height: 11),
+                    const Spacer(),
+                    // Price
+                    block(width: 64, height: 14),
+                    const SizedBox(height: 5),
+                    // Original price strikethrough
+                    block(width: 44, height: 10),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Skeleton chip — mirrors the real category chip.
+// ─────────────────────────────────────────────────────────────────────────────
+class _SkeletonChip extends StatelessWidget {
+  const _SkeletonChip({required this.width});
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = isDark
+        ? const Color(0xFF2C2C2C)
+        : const Color(0xFFE0E0E0);
+    final cardWhite = Theme.of(context).cardColor;
+
+    return _Shimmer(
+      child: Container(
+        width: width,
+        height: 36,
+        margin: const EdgeInsets.only(right: 8),
+        decoration: BoxDecoration(
+          color: cardWhite,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(15),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Container(
+            width: width * 0.55,
+            height: 10,
+            decoration: BoxDecoration(
+              color: baseColor,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Full skeleton state — chip row + 2-column grid of skeleton cards.
+// ─────────────────────────────────────────────────────────────────────────────
+class _SkeletonLoading extends StatelessWidget {
+  const _SkeletonLoading();
+
+  static const _chipWidths = [56.0, 80.0, 100.0, 72.0, 68.0, 76.0, 70.0];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Skeleton chip row
+        SizedBox(
+          height: 40,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: _chipWidths.length,
+            itemBuilder: (_, i) => _SkeletonChip(width: _chipWidths[i]),
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        // "All Products" title placeholder
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: _Shimmer(
+            child: Container(
+              width: 110,
+              height: 14,
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? const Color(0xFF2C2C2C)
+                    : const Color(0xFFE0E0E0),
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        // 2-column skeleton grid  (6 cards)
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.72,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+          ),
+          itemCount: 6,
+          itemBuilder: (_, __) => const _SkeletonCard(),
+        ),
+      ],
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main widget
+// ─────────────────────────────────────────────────────────────────────────────
 class CategoryChips extends StatefulWidget {
   const CategoryChips({super.key});
 
@@ -44,12 +344,6 @@ class _CategoryChipsState extends State<CategoryChips> {
     }
   }
 
-  List<Product> _getFilteredProducts(Box<Product> box) {
-    final all = box.values.toList();
-    if (_selectedCategory == 'All') return all;
-    return all.where((p) => p.category == _selectedCategory).toList();
-  }
-
   int _discountPercent(double price, double original) {
     if (original <= 0 || original <= price) return 0;
     return (((original - price) / original) * 100).round();
@@ -71,20 +365,31 @@ class _CategoryChipsState extends State<CategoryChips> {
     }
   }
 
-  bool _isWishlisted(Box<String> wishBox, String productId) {
-    return wishBox.values.contains(productId);
-  }
+  bool _isWishlisted(Box<String> wishBox, String productId) =>
+      wishBox.values.contains(productId);
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = context.watch<ProductProvider>().isLoading;
+
+    // ── While loading: show full skeleton ──────────────────────────────────
+    if (isLoading) return const _SkeletonLoading();
+
+    // ── Loaded: show real UI ───────────────────────────────────────────────
     final primaryBlue = Theme.of(context).colorScheme.primary;
     final darkText = Theme.of(context).colorScheme.onSurface;
     final greyText = Theme.of(context).colorScheme.onSurface.withAlpha(150);
     final cardWhite = Theme.of(context).cardColor;
 
+    final allProducts = context.watch<ProductProvider>().products;
+    final products = _selectedCategory == 'All'
+        ? allProducts
+        : allProducts.where((p) => p.category == _selectedCategory).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // ── Category chips ─────────────────────────────────────────────────
         SizedBox(
           height: 40,
           child: ListView.builder(
@@ -158,50 +463,42 @@ class _CategoryChipsState extends State<CategoryChips> {
 
         const SizedBox(height: 12),
 
-        ValueListenableBuilder(
-          valueListenable: Hive.box<Product>('products').listenable(),
-          builder: (context, Box<Product> box, _) {
-            final products = _getFilteredProducts(box);
-
-            if (products.isEmpty) {
-              return SizedBox(
-                height: 200,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.inventory_2_outlined,
-                        size: 48,
-                        color: greyText.withAlpha(127),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'No products found',
-                        style: TextStyle(color: greyText, fontSize: 15),
-                      ),
-                    ],
+        if (products.isEmpty)
+          SizedBox(
+            height: 200,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.inventory_2_outlined,
+                    size: 48,
+                    color: greyText.withAlpha(127),
                   ),
-                ),
-              );
-            }
-
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.72,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
+                  const SizedBox(height: 12),
+                  Text(
+                    'No products found',
+                    style: TextStyle(color: greyText, fontSize: 15),
+                  ),
+                ],
               ),
-              itemCount: products.length,
-              itemBuilder: (context, index) =>
-                  _buildProductCard(context, products[index]),
-            );
-          },
-        ),
+            ),
+          )
+        else
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.72,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
+            itemCount: products.length,
+            itemBuilder: (context, index) =>
+                _buildProductCard(context, products[index]),
+          ),
       ],
     );
   }
@@ -216,6 +513,9 @@ class _CategoryChipsState extends State<CategoryChips> {
     final priceGreen = isDark
         ? const Color(0xFF66BB6A)
         : const Color(0xFF2E7D32);
+    final shimmerBase = isDark
+        ? const Color(0xFF2C2C2C)
+        : const Color(0xFFE0E0E0);
 
     final discount = _discountPercent(product.price, product.originalPrice);
     final categoryIcon = _categoryIcon(product.category);
@@ -242,6 +542,7 @@ class _CategoryChipsState extends State<CategoryChips> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ── Image area ───────────────────────────────────────────────
             Stack(
               children: [
                 Container(
@@ -253,14 +554,47 @@ class _CategoryChipsState extends State<CategoryChips> {
                       topRight: Radius.circular(16),
                     ),
                   ),
-                  child: Center(
-                    child: Icon(
-                      categoryIcon,
-                      size: 56,
-                      color: primaryBlue.withAlpha(76),
-                    ),
-                  ),
+                  child: product.imageUrl.isNotEmpty
+                      ? ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
+                          ),
+                          child: Image.network(
+                            product.imageUrl,
+                            width: double.infinity,
+                            height: 130,
+                            fit: BoxFit.cover,
+                            // Grey shimmer while the image bytes arrive,
+                            // so all cards feel uniform during network load.
+                            loadingBuilder: (context, child, progress) {
+                              if (progress == null) return child;
+                              return _Shimmer(
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 130,
+                                  color: shimmerBase,
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, _, __) => Center(
+                              child: Icon(
+                                categoryIcon,
+                                size: 56,
+                                color: primaryBlue.withAlpha(76),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Center(
+                          child: Icon(
+                            categoryIcon,
+                            size: 56,
+                            color: primaryBlue.withAlpha(76),
+                          ),
+                        ),
                 ),
+
                 if (discount > 0)
                   Positioned(
                     top: 8,
@@ -284,6 +618,7 @@ class _CategoryChipsState extends State<CategoryChips> {
                       ),
                     ),
                   ),
+
                 Positioned(
                   top: 8,
                   right: 8,
@@ -320,6 +655,8 @@ class _CategoryChipsState extends State<CategoryChips> {
                 ),
               ],
             ),
+
+            // ── Text / price area ────────────────────────────────────────
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(10),
@@ -355,7 +692,6 @@ class _CategoryChipsState extends State<CategoryChips> {
                       ),
                     ),
                     const SizedBox(height: 8),
-
                   ],
                 ),
               ),

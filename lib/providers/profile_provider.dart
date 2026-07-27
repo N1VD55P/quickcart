@@ -14,23 +14,22 @@ class ProfileProvider extends ChangeNotifier {
 
   int get totalOrders => _user == null
       ? 0
-      : Hive.box<Order>('orders')
-          .values
-          .where((o) => o.userEmail == _user!.email)
-          .length;
+      : Hive.box<Order>(
+          'orders',
+        ).values.where((o) => o.userEmail == _user!.email).length;
 
   double get totalSpent => _user == null
       ? 0
-      : Hive.box<Order>('orders')
-          .values
-          .where((o) => o.userEmail == _user!.email)
-          .fold(0, (sum, o) => sum + o.total);
+      : Hive.box<Order>('orders').values
+            .where((o) => o.userEmail == _user!.email)
+            .fold(0, (sum, o) => sum + o.total);
 
   void loadUser() {
     final email = Hive.box('settings').get('currentUser', defaultValue: '');
     if (email.isEmpty) return;
-    final matches =
-        Hive.box<User>('users').values.where((u) => u.email == email);
+    final matches = Hive.box<User>(
+      'users',
+    ).values.where((u) => u.email == email);
     if (matches.isNotEmpty) {
       _user = matches.first;
       notifyListeners();
@@ -46,7 +45,9 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   Future<String?> changePassword(
-      String currentPassword, String newPassword) async {
+    String currentPassword,
+    String newPassword,
+  ) async {
     if (_user == null) return 'User not found';
 
     if (PasswordHelper.hashPassword(currentPassword) != _user!.passwordHash) {
