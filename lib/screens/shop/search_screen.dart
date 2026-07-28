@@ -335,7 +335,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
                       child: Image.network(
                         product.imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Center(
+                        errorBuilder: (_, _, _) => Center(
                           child: Icon(
                             icon,
                             size: 32,

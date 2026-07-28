@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
-import '../../models/cart_item.dart';
 import '../../providers/Product_Provider.dart';
+import '../../providers/cart_provider.dart';
 import '../shop/home_screen.dart';
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
 
-  // Resolve wishlisted IDs against the in-memory product list
   List<Product> _wishlistProducts(BuildContext context) {
     final wishBox = Hive.box<String>('wishlist');
     final ids = wishBox.values.toSet();
@@ -30,31 +29,12 @@ class WishlistScreen extends StatelessWidget {
   }
 
   Future<void> _addToCart(BuildContext context, Product product) async {
-    final primaryBlue = Theme.of(context).colorScheme.primary;
-    final cartBox = Hive.box<CartItem>('cart');
-    final existing = cartBox.values
-        .where((c) => c.productId == product.id)
-        .toList();
-    if (existing.isNotEmpty) {
-      existing.first.quantity += 1;
-      await existing.first.save();
-    } else {
-      await cartBox.add(
-        CartItem(
-          productId: product.id,
-          name: product.name,
-          price: product.price,
-          imageUrl: product.imageUrl,
-          quantity: 1,
-          category: product.category,
-        ),
-      );
-    }
+    await context.read<CartProvider>().addToCart(product);
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${product.name} added to cart'),
-          backgroundColor: primaryBlue,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 2),
           shape: RoundedRectangleBorder(
@@ -67,7 +47,20 @@ class WishlistScreen extends StatelessWidget {
 
   Future<void> _moveAllToCart(BuildContext context, List<Product> items) async {
     for (final product in items) {
-      await _addToCart(context, product);
+      await context.read<CartProvider>().addToCart(product);
+    }
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${items.length} items added to cart'),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
     }
   }
 
@@ -82,12 +75,10 @@ class WishlistScreen extends StatelessWidget {
         child: ValueListenableBuilder(
           valueListenable: Hive.box<String>('wishlist').listenable(),
           builder: (context, box, _) {
-            // wishlist box changed → re-resolve against provider products
             final items = _wishlistProducts(context);
 
             return Column(
               children: [
-                // ── Header ────────────────────────────────────────────
                 Container(
                   color: primaryBlue,
                   padding: const EdgeInsets.symmetric(
@@ -175,7 +166,6 @@ class WishlistScreen extends StatelessWidget {
         valueListenable: Hive.box<String>('wishlist').listenable(),
         builder: (context, box, _) {
           final items = _wishlistProducts(context);
-          final primaryBlue = Theme.of(context).colorScheme.primary;
           if (items.isEmpty) return const SizedBox.shrink();
           return FloatingActionButton.extended(
             onPressed: () => _moveAllToCart(context, items),
@@ -262,7 +252,6 @@ class WishlistScreen extends StatelessWidget {
   }
 }
 
-// ── Wishlist card (unchanged from original) ───────────────────────────────────
 class _WishlistCard extends StatefulWidget {
   final Product product;
   final VoidCallback onAddToCart;
