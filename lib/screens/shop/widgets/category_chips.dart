@@ -295,7 +295,7 @@ class _SkeletonLoading extends StatelessWidget {
             mainAxisSpacing: 12,
           ),
           itemCount: 6,
-          itemBuilder: (_, __) => const _SkeletonCard(),
+          itemBuilder: (_, _) => const _SkeletonCard(),
         ),
       ],
     );
@@ -577,7 +577,7 @@ class _CategoryChipsState extends State<CategoryChips> {
                                 ),
                               );
                             },
-                            errorBuilder: (context, _, __) => Center(
+                            errorBuilder: (context, _, _) => Center(
                               child: Icon(
                                 categoryIcon,
                                 size: 56,

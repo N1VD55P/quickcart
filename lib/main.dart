@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/address.dart';
 import 'models/cart_item.dart';
+import 'models/coupon.dart';
 import 'models/order.dart';
 import 'models/review.dart';
 import 'models/user.dart';
@@ -24,6 +25,7 @@ Future<void> main() async {
   Hive.registerAdapter(OrderAdapter());
   Hive.registerAdapter(AddressAdapter());
   Hive.registerAdapter(ReviewAdapter());
+  Hive.registerAdapter(CouponAdapter());
 
   await Hive.openBox<User>('users');
   await Hive.openBox<CartItem>('cart');
@@ -32,6 +34,7 @@ Future<void> main() async {
   await Hive.openBox<Review>('reviews');
   await Hive.openBox('settings');
   await Hive.openBox<String>('wishlist');
+  await Hive.openBox<Coupon>('coupons');
 
   // Fetch products once before the app starts so every screen
   // that reads ProductProvider already has data on first build.
