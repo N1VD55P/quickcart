@@ -21,6 +21,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _reviewController = TextEditingController();
   int _selectedRating = 0;
   bool _isSubmitting = false;
+  //avoide
   bool _imageLoaded = false;
 
   @override
@@ -29,7 +30,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.dispose();
   }
 
-  // ── Helpers ────────────────────────────────────────────────────────────────
 
   int get _discountPercent {
     final o = widget.product.originalPrice;

@@ -69,7 +69,6 @@ class DashboardTab extends StatelessWidget {
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                // ── Top stats ────────────────────────────────────
                 const _SectionHeader('Overview'),
                 const SizedBox(height: 8),
                 GridView.count(
@@ -213,7 +212,7 @@ class _SectionHeader extends StatelessWidget {
       style: const TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.w700,
-        color: Colors.black54,
+        color: Color.fromARGB(255, 245, 244, 244),
         letterSpacing: 0.5,
       ),
     );

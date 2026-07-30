@@ -85,7 +85,6 @@ class _ProductsTabState extends State<ProductsTab> {
     );
   }
 
-  // ── Build ────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -403,7 +402,6 @@ class _StockBadge extends StatelessWidget {
   }
 }
 
-// ── Add / Edit product form ───────────────────────────────────────────────────
 
 class _ProductFormSheet extends StatefulWidget {
   final Product? existing;
