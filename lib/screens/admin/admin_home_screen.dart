@@ -67,53 +67,61 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_navItems[_currentIndex].label!),
-        backgroundColor: Colors.black87,
-        foregroundColor: Colors.white,
-        actions: [
-          TextButton.icon(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: const Text('Logout'),
-                  content: const Text('Exit admin panel?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Exit',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-            icon: const Icon(Icons.logout, color: Colors.white, size: 18),
-            label: const Text('Exit', style: TextStyle(color: Colors.white)),
-          ),
-        ],
+    // Force light mode for entire admin panel
+    return Theme(
+      data: ThemeData(
+        colorSchemeSeed: Colors.blue,
+        brightness: Brightness.light,
+        useMaterial3: true,
       ),
-      body: IndexedStack(index: _currentIndex, children: _tabs),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (i) => setState(() => _currentIndex = i),
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black87,
-        unselectedItemColor: Colors.grey,
-        selectedFontSize: 11,
-        unselectedFontSize: 11,
-        items: _navItems,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_navItems[_currentIndex].label!),
+          backgroundColor: const Color.fromARGB(221, 104, 103, 103),
+          foregroundColor: Colors.white,
+          actions: [
+            TextButton.icon(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text('Logout'),
+                    content: const Text('Exit admin panel?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Exit',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(Icons.logout, color: Colors.white, size: 18),
+              label: const Text('Exit', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
+        body: IndexedStack(index: _currentIndex, children: _tabs),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (i) => setState(() => _currentIndex = i),
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: const Color.fromARGB(221, 72, 72, 72),
+          unselectedItemColor: Colors.grey,
+          selectedFontSize: 11,
+          unselectedFontSize: 11,
+          items: _navItems,
+        ),
       ),
     );
   }
