@@ -22,5 +22,6 @@ class HiveService {
 
   static Box get settings => Hive.box('settings');
 
-  static Box<Product> get wishlist => Hive.box<Product>('wishlist');
+  static Box<String> get wishlist =>
+      Hive.box<String>('wishlist');
 }

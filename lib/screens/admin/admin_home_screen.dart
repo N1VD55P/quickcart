@@ -67,7 +67,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Force light mode for entire admin panel
     return Theme(
       data: ThemeData(
         colorSchemeSeed: Colors.blue,
