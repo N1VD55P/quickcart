@@ -199,7 +199,6 @@ class DashboardTab extends StatelessWidget {
   }
 }
 
-// ── Reusable widgets ──────────────────────────────────────────────────────────
 
 class _SectionHeader extends StatelessWidget {
   final String title;

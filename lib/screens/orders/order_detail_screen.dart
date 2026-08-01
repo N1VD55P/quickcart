@@ -3,8 +3,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../models/order.dart';
 import '../../models/address.dart';
-import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
+import '../../providers/Product_Provider.dart';
 import '../shop/cart_screen.dart';
 
 class OrderDetailScreen extends StatelessWidget {
@@ -32,10 +32,10 @@ class OrderDetailScreen extends StatelessWidget {
   Future<void> _reorder(BuildContext context) async {
     final primaryBlue = Theme.of(context).colorScheme.primary;
     final cart = context.read<CartProvider>();
-    final productsBox = Hive.box<Product>('products');
+    final allProducts = context.read<ProductProvider>().products;  
 
     for (final item in order.items) {
-      final matches = productsBox.values.where((p) => p.id == item.productId);
+      final matches = allProducts.where((p) => p.id == item.productId);
       if (matches.isNotEmpty) {
         await cart.addToCart(matches.first);
       }
