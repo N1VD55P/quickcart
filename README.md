@@ -1,7 +1,7 @@
-QuickCart
+Cartify
 1. Project Title & Badges
 
-Project Title: QuickCart
+Project Title: Cartify
 
 One-line Tagline: A Flutter-powered offline-first Android shopping app with Firebase-backed product catalogue, Hive local storage, and a built-in admin panel.
 
@@ -15,7 +15,7 @@ Show Image
 
 2. Abstract
 
-QuickCart is a Flutter-based, offline-first e-commerce Android application developed during a Practice School II internship at Devherds Software Solutions, Mohali, Punjab, from June 2026 to July 2026. The app addresses the need for a lightweight yet fully functional mobile retail experience that works reliably even with limited connectivity. It uses Cloud Firestore for remote product catalogue data and Hive for all local persistence including users, cart items, orders, addresses, reviews, wishlists, coupons, and settings. State is managed through the Provider package, and authentication is handled via Firebase Authentication with SHA-256 hashed local credentials for offline scenarios. The application also includes a seven-tab admin panel for managing products, orders, users, inventory, reviews, and coupons. QuickCart was built over approximately six weeks of active development — after two weeks of advanced Flutter study and a one-week pivot from an earlier project — and delivers a fully functional Android storefront prototype demonstrating practical mobile engineering, cloud and offline storage integration, reactive state management, and secure authentication flows.
+Cartify is a Flutter-based, offline-first e-commerce Android application developed during a Practice School II internship at Devherds Software Solutions, Mohali, Punjab, from June 2026 to July 2026. The app addresses the need for a lightweight yet fully functional mobile retail experience that works reliably even with limited connectivity. It uses Cloud Firestore for remote product catalogue data and Hive for all local persistence including users, cart items, orders, addresses, reviews, wishlists, coupons, and settings. State is managed through the Provider package, and authentication is handled via Firebase Authentication with SHA-256 hashed local credentials for offline scenarios. The application also includes a seven-tab admin panel for managing products, orders, users, inventory, reviews, and coupons. Cartify was built over approximately six weeks of active development — after two weeks of advanced Flutter study and a one-week pivot from an earlier project — and delivers a fully functional Android storefront prototype demonstrating practical mobile engineering, cloud and offline storage integration, reactive state management, and secure authentication flows.
 
 3. Table of Contents
 1. Project Title & Badges
@@ -40,11 +40,11 @@ QuickCart is a Flutter-based, offline-first e-commerce Android application devel
 4. Introduction to the Problem Domain
 Domain
 
-QuickCart belongs to the e-commerce and retail technology domain. It is a consumer-facing Android storefront covering product discovery, account management, cart and checkout workflows, and order tracking.
+Cartify belongs to the e-commerce and retail technology domain. It is a consumer-facing Android storefront covering product discovery, account management, cart and checkout workflows, and order tracking.
 
 Problem Statement
 
-Many retail users need a fast, offline-resilient mobile shopping experience. Existing web-first solutions struggle on low-connectivity Android devices and require repeated loading of all data. QuickCart solves this by fetching the product catalogue from Firestore once and storing all transactional data — cart, orders, addresses, reviews — locally in Hive, giving users a smooth experience regardless of connectivity.
+Many retail users need a fast, offline-resilient mobile shopping experience. Existing web-first solutions struggle on low-connectivity Android devices and require repeated loading of all data. Cartify solves this by fetching the product catalogue from Firestore once and storing all transactional data — cart, orders, addresses, reviews — locally in Hive, giving users a smooth experience regardless of connectivity.
 
 Why Mobile
 
@@ -61,7 +61,7 @@ This application was built at Devherds Software Solutions, a software developmen
 
 Project Context
 
-QuickCart was assigned as the main PS-II internship project after an initial project (a QR/barcode-based Smart Data Collection and Inspection App) was found to be too technically complex to complete within the remaining internship window. QuickCart was scoped as a well-rounded Flutter project that could demonstrate all required concepts — state management, local storage, cloud integration, authentication, and admin functionality — within the available time.
+Cartify was assigned as the main PS-II internship project after an initial project (a QR/barcode-based Smart Data Collection and Inspection App) was found to be too technically complex to complete within the remaining internship window. Cartify was scoped as a well-rounded Flutter project that could demonstrate all required concepts — state management, local storage, cloud integration, authentication, and admin functionality — within the available time.
 
 Business Relevance
 
@@ -71,7 +71,7 @@ The project demonstrates a complete mobile commerce frontend suitable for use as
 Core Features
 Secure signup and login with SHA-256 hashed passwords stored locally in Hive.
 Offline password recovery using a locally stored security question and answer.
-Product catalogue fetched once from Cloud Firestore and cached in memory.
+Product catalogue fetched from Cloud Firestore and cached in the typed Hive `products` box for offline browsing.
 Home screen with category filter chips, a promotional banner slider, and product grid.
 Local search across product names and metadata using cached data.
 Product detail screen with images, ratings, stock status, and reviews.
@@ -257,7 +257,7 @@ Week 1	1 June – 7 June 2026	Advanced Flutter Study	Studied null safety, async/
 Week 2	8 June – 14 June 2026	State Management & UI Planning	Studied setState limitations, Provider package (ChangeNotifier, Consumer, MultiProvider), practised with counter and theme-switcher examples, sketched app UI flow.
 Week 3	15 June – 21 June 2026	First Project (SDCI) Begins	Planned architecture for the QR/barcode-based SDCI project. Built Signup, Login, and Splash screens with SHA-256 hashing and session routing.
 Week 4	22 June – 28 June 2026	Navigation, Hive & Pivot Decision	Implemented navigation and routing for SDCI. Set up Hive in main.dart, registered TypeAdapters, ran build_runner. Built a mini side project combining Hive, Provider, and CRUD to consolidate learning.
-Week 5	29 June – 5 July 2026	QuickCart Begins	Decided to pivot from SDCI to QuickCart. Designed full app flow, defined all Hive models (User, CartItem, Order, Address, Review, Coupon) with HiveType IDs, set up lib/ folder structure, built CartProvider.
+Week 5	29 June – 5 July 2026	Cartify Begins	Decided to pivot from SDCI to Cartify. Designed full app flow, defined all Hive models (User, CartItem, Order, Address, Review, Coupon) with HiveType IDs, set up lib/ folder structure, built CartProvider.
 Week 6	6 July – 12 July 2026	Core Screens Built	Built ProductProvider (Firestore fetch + in-memory cache), Home screen with grid/filters/banner/search, Wishlist screen with ValueListenableBuilder, set up Firebase project and added google-services.json.
 Week 7	13 July – 19 July 2026	Checkout, Orders & Profile	Built Product Detail, Cart, Checkout with address/coupon/mock payment, Order Success, Order History, cascade account deletion, and Profile management screens.
 Week 8	20 July – 26 July 2026	Admin Panel, Polish & Wrap-Up	Built Admin Login, AdminHomeScreen (7-tab IndexedStack), Dashboard (Hive + Firestore stats), Products tab (Firestore CRUD via StreamBuilder), Orders tab. Spent final days refining UI, fixing bugs, and writing documentation.
@@ -301,7 +301,7 @@ Screenshots Placeholder
 [PLACEHOLDER] Admin Dashboard and Products tab.
 15. Challenges Faced & Solutions
 Challenge	Impact	Solution
-SDCI project too complex (camera, barcode scanning, SQLite) to complete in time	Lost 3 weeks of productive development	Pivoted to QuickCart after Diary Presentation 1, scoped to be completable and still comprehensive
+SDCI project too complex (camera, barcode scanning, SQLite) to complete in time	Lost 3 weeks of productive development	Pivoted to Cartify after Diary Presentation 1, scoped to be completable and still comprehensive
 Hive adapter generation with build_runner	Missing or broken .g.dart files caused runtime errors	Ran dart run build_runner build --delete-conflicting-outputs and ensured all @HiveType/@HiveField annotations were correct before generating
 Synchronising Firebase Auth session with local Hive state	Screens needed a stable local session value after login	Stored current user email in Hive settings box and refreshed providers from it after successful sign-in
 Cart totals staying reactive after Hive writes	UI showed stale totals after quantity changes	Centralised all cart mutations inside CartProvider and called notifyListeners() after every Hive write
@@ -310,7 +310,7 @@ Cascade account deletion across multiple Hive boxes	Deleted accounts left stale 
 16. Conclusions & Recommendations
 Conclusion
 
-QuickCart successfully demonstrates how Flutter can be used to build a production-grade Android commerce application combining cloud-backed product data, fully offline-capable local storage, reactive state management, Firebase authentication, and an in-app admin panel — all within an 8-week internship period.
+Cartify successfully demonstrates how Flutter can be used to build a production-grade Android commerce application combining cloud-backed product data, fully offline-capable local storage, reactive state management, Firebase authentication, and an in-app admin panel — all within an 8-week internship period.
 
 Recommendations for Future Work
 Integrate a real payment gateway (Razorpay, Stripe) to replace the mock payment flow.

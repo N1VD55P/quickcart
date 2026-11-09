@@ -1,7 +1,7 @@
-# QuickCart Project Documentation
+# Cartify Project Documentation
 
 ## Project Overview
-QuickCart is a Flutter storefront app that uses Hive for local persistence, Provider for cart state, and a feature-oriented screen structure. The application is fully client-side: users sign up, log in, browse products, manage a wishlist and cart, place orders, save addresses, write reviews, and manage their profile without any backend API.
+Cartify is a Flutter storefront app that uses Hive for local persistence, Provider for cart state, and a feature-oriented screen structure. Firebase Authentication handles online identity, Cloud Firestore provides the product catalogue, and Hive stores the offline catalogue cache and local transactional data.
 
 ## Architecture
 The codebase is organized by feature instead of by a strict layered architecture.
@@ -9,7 +9,7 @@ The codebase is organized by feature instead of by a strict layered architecture
 - `lib/main.dart` initializes Flutter, Hive, all adapters, and all boxes, then launches the app at `SplashScreen`.
 - `lib/screens/` contains the feature UI, split into `auth`, `shop`, `orders`, and `profile`.
 - `lib/models/` contains all Hive-persisted entities: `Product`, `User`, `CartItem`, `Order`, `Address`, and `Review`.
-- `lib/providers/` contains `CartProvider` plus two empty placeholder providers for auth and profile.
+- `lib/providers/` contains `CartProvider`, `AuthProvider`, `ProfileProvider`, `ProductProvider`, and `ThemeProvider`.
 - `lib/services/` contains `AuthService` and `HiveService`, but most screens access Hive directly rather than going through these abstractions.
 - `lib/utils/` holds validation and password hashing helpers.
 - `lib/screens/shop/widgets/` and `lib/providers/widgets/` contain reusable UI pieces for the home feed and cart.
@@ -28,7 +28,7 @@ All persistent data is stored locally in Hive.
 - `settings` stores session keys such as `currentUser`.
 - `wishlist` stores product identifiers as `String` values, even though `HiveService.wishlist` is typed as `Box<Product>`.
 
-The models are simple Hive objects with generated adapters. They support local CRUD, but there is no backend sync, no remote catalog, and no network-dependent state.
+The models are simple Hive objects with generated adapters. Firestore is the remote source for the product catalogue; the typed Hive `products` box provides the offline catalogue cache, while transactional data remains local.
 
 ## Screen-By-Screen Explanation
 
@@ -118,7 +118,7 @@ The app is driven by Hive boxes and direct UI reads.
 
 - Auth writes the current user email to `settings.currentUser`.
 - Profile, checkout, reviews, addresses, and orders all derive the active user from that session key.
-- Products are seeded into Hive from a local list inside `HomeScreen`.
+- Products are fetched from Cloud Firestore and cached in the typed Hive `products` box by `ProductProvider`; the cached catalogue remains available when the network is unavailable.
 - Cart changes are handled by `CartProvider`, which persists cart records in Hive and notifies listeners.
 - Wishlist is stored as string IDs in Hive and resolved back to `Product` records on demand.
 - Orders are built from the current cart items and stored as a full snapshot.
@@ -136,16 +136,16 @@ The app is driven by Hive boxes and direct UI reads.
 - Product reviews and average rating display.
 - Profile editing, password change, and account deletion.
 
-## Missing Features
-- No backend API or remote data source.
-- No true auth provider or profile provider implementation, despite placeholder files.
+## Current Limitations
+- Firebase configuration and Firestore access require an authenticated project at runtime.
+- The admin password is currently configured in the client and should be replaced with Firebase custom claims before production.
 - No route management layer.
-- No cart or wishlist scoping by user, beyond cleanup on account deletion.
+- Wishlist records are currently stored as product IDs in a shared local box; user-specific wishlist partitioning remains a future hardening task.
 - No stock enforcement on add-to-cart or checkout.
 - No order fulfillment progression beyond the static status labels used in the UI.
 - No robust password policy or salted password storage.
 - No meaningful automated test coverage; `test/widget_test.dart` is empty.
-- No admin workflows for product management, order management, or coupon management.
+- Real payment gateways, push notifications, multi-vendor support, and geo-fencing are outside the current scope.
 
 ## Suggested Improvements
 - Introduce a repository/service boundary so screens stop reaching into Hive directly.
@@ -173,7 +173,7 @@ The app is driven by Hive boxes and direct UI reads.
 - Separate demo product seeding from runtime UI code.
 
 ### Phase 3: Maintainability
-- Implement a real auth/profile provider layer or remove the empty placeholders.
+- Replace the client-side admin password with Firebase custom claims before production.
 - Introduce centralized navigation and reusable form components.
 - Reduce duplicated styling across auth, profile, and shop screens.
 

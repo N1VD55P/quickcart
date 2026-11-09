@@ -3,6 +3,7 @@ import 'package:quickcart/utils/validators.dart';
 import 'package:quickcart/utils/password_helper.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:quickcart/models/user.dart';
+
 const _bgColor = Color(0xFFFFF8F3);
 const _brandAccent = Colors.blue;
 const _brandDeep = Color(0xFF1A1A2E);
@@ -37,7 +38,9 @@ class _SignupScreenState extends State<SignupScreen> {
           content: const Text("Passwords do not match"),
           backgroundColor: _errorColor,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       );
       return;
@@ -48,7 +51,8 @@ class _SignupScreenState extends State<SignupScreen> {
     final usersBox = Hive.box<User>('users');
 
     final exists = usersBox.values.any(
-      (u) => u.email.trim().toLowerCase() ==
+      (u) =>
+          u.email.trim().toLowerCase() ==
           _emailController.text.trim().toLowerCase(),
     );
 
@@ -60,7 +64,9 @@ class _SignupScreenState extends State<SignupScreen> {
             content: const Text("Email already registered"),
             backgroundColor: _errorColor,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
         );
       }
@@ -84,7 +90,9 @@ class _SignupScreenState extends State<SignupScreen> {
           content: const Text("Account created successfully!"),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       );
       Navigator.of(context).pop();
@@ -101,7 +109,6 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  
   Widget _buildField({
     required TextEditingController controller,
     required String label,
@@ -214,7 +221,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   children: [
                     Container(
                       width: 58,
-                      height:58,
+                      height: 58,
                       decoration: BoxDecoration(
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(14),
@@ -240,7 +247,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         children: [
                           TextSpan(text: "Create your\n"),
                           TextSpan(
-                            text: "QuickCart ",
+                            text: "Cartify ",
                             style: TextStyle(color: _brandAccent),
                           ),
                           TextSpan(text: "account"),
@@ -297,8 +304,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     () => _showConfirmPassword = !_showConfirmPassword,
                   ),
                   validator: (v) {
-                    if (v == null || v.isEmpty) return "Please confirm your password";
-                    if (v != _passwordController.text) return "Passwords do not match";
+                    if (v == null || v.isEmpty)
+                      return "Please confirm your password";
+                    if (v != _passwordController.text)
+                      return "Passwords do not match";
                     return null;
                   },
                 ),

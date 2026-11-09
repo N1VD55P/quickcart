@@ -4,6 +4,7 @@ import 'models/address.dart';
 import 'models/cart_item.dart';
 import 'models/coupon.dart';
 import 'models/order.dart';
+import 'models/product.dart';
 import 'models/review.dart';
 import 'models/user.dart';
 import 'screens/auth/splash_screen.dart';
@@ -23,6 +24,7 @@ Future<void> main() async {
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(CartItemAdapter());
   Hive.registerAdapter(OrderAdapter());
+  Hive.registerAdapter(ProductAdapter());
   Hive.registerAdapter(AddressAdapter());
   Hive.registerAdapter(ReviewAdapter());
   Hive.registerAdapter(CouponAdapter());
@@ -30,6 +32,7 @@ Future<void> main() async {
   await Hive.openBox<User>('users');
   await Hive.openBox<CartItem>('cart');
   await Hive.openBox<Order>('orders');
+  await Hive.openBox<Product>('products');
   await Hive.openBox<Address>('addresses');
   await Hive.openBox<Review>('reviews');
   await Hive.openBox('settings');
@@ -51,20 +54,20 @@ Future<void> main() async {
         // Use .value so we pass the already-loaded instance
         ChangeNotifierProvider<ProductProvider>.value(value: productProvider),
       ],
-      child: const QuickCartApp(),
+      child: const CartifyApp(),
     ),
   );
 }
 
-class QuickCartApp extends StatelessWidget {
-  const QuickCartApp({super.key});
+class CartifyApp extends StatelessWidget {
+  const CartifyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
         return MaterialApp(
-          title: 'QuickCart',
+          title: 'Cartify',
           debugShowCheckedModeBanner: false,
           themeMode: themeProvider.isDarkMode
               ? ThemeMode.dark

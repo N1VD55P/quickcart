@@ -20,6 +20,8 @@ class CartItem extends HiveObject {
   int quantity;
   @HiveField(5)
   String category;
+  @HiveField(6)
+  String userEmail;
 
   CartItem({
     required this.productId,
@@ -28,5 +30,6 @@ class CartItem extends HiveObject {
     required this.imageUrl,
     required this.quantity,
     required this.category,
+    required this.userEmail,
   });
 }

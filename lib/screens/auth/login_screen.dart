@@ -210,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             TextSpan(text: "Welcome\nback to "),
                             TextSpan(
-                              text: "QuickCart",
+                              text: "Cartify",
                               style: TextStyle(color: _brandAccent),
                             ),
                           ],

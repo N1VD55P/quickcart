@@ -11,7 +11,7 @@ class AuthProvider extends ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Phone OTP state
-String? _verificationId;
+  String? _verificationId;
   String? get verificationId => _verificationId;
   String? _otpError;
   String? get otpError => _otpError;
@@ -21,8 +21,9 @@ String? _verificationId;
   Future<void> loadCurrentUser() async {
     final email = Hive.box('settings').get('currentUser', defaultValue: '');
     if (email.isEmpty) return;
-    final matches =
-        Hive.box<User>('users').values.where((u) => u.email == email);
+    final matches = Hive.box<User>(
+      'users',
+    ).values.where((u) => u.email == email);
     if (matches.isNotEmpty) {
       _currentUser = matches.first;
       notifyListeners();
@@ -39,6 +40,16 @@ String? _verificationId;
       await _saveUserLocally(email.trim().toLowerCase());
       return null;
     } on fb.FirebaseAuthException catch (e) {
+      final normalizedEmail = email.trim().toLowerCase();
+      final localUser = Hive.box<User>('users').values.where(
+        (user) =>
+            user.email == normalizedEmail &&
+            user.passwordHash == PasswordHelper.hashPassword(password),
+      );
+      if (localUser.isNotEmpty) {
+        await _saveUserLocally(normalizedEmail);
+        return null;
+      }
       return _firebaseError(e.code);
     }
   }
@@ -59,16 +70,19 @@ String? _verificationId;
 
       // also save to Hive for offline use
       final usersBox = Hive.box<User>('users');
-      final exists = usersBox.values
-          .any((u) => u.email == email.trim().toLowerCase());
+      final exists = usersBox.values.any(
+        (u) => u.email == email.trim().toLowerCase(),
+      );
       if (!exists) {
-        await usersBox.add(User(
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
-          passwordHash: PasswordHelper.hashPassword(password),
-          phone: '',
-          securityAnswer: securityAnswer.trim().toLowerCase(),
-        ));
+        await usersBox.add(
+          User(
+            name: name.trim(),
+            email: email.trim().toLowerCase(),
+            passwordHash: PasswordHelper.hashPassword(password),
+            phone: '',
+            securityAnswer: securityAnswer.trim().toLowerCase(),
+          ),
+        );
       }
       return null;
     } on fb.FirebaseAuthException catch (e) {
@@ -97,13 +111,15 @@ String? _verificationId;
       final email = user.email ?? '';
       final exists = usersBox.values.any((u) => u.email == email);
       if (!exists) {
-        await usersBox.add(User(
-          name: user.displayName ?? 'User',
-          email: email,
-          passwordHash: '',
-          phone: user.phoneNumber ?? '',
-          securityAnswer: '',
-        ));
+        await usersBox.add(
+          User(
+            name: user.displayName ?? 'User',
+            email: email,
+            passwordHash: '',
+            phone: user.phoneNumber ?? '',
+            securityAnswer: '',
+          ),
+        );
       }
       await _saveUserLocally(email);
       return null;
@@ -113,14 +129,15 @@ String? _verificationId;
   }
 
   // ── Phone — Send OTP ─────────────────────────────────────────────
-Future<String?> sendOtp(String phoneNumber) async {
+  Future<String?> sendOtp(String phoneNumber) async {
     try {
       await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         verificationCompleted: (fb.PhoneAuthCredential credential) async {
           await _auth.signInWithCredential(credential);
           await _saveUserLocally(
-              _auth.currentUser?.email ?? _auth.currentUser?.phoneNumber ?? '');
+            _auth.currentUser?.email ?? _auth.currentUser?.phoneNumber ?? '',
+          );
           notifyListeners();
         },
         verificationFailed: (fb.FirebaseAuthException e) {
@@ -145,6 +162,7 @@ Future<String?> sendOtp(String phoneNumber) async {
       return 'Failed to send OTP: $e';
     }
   }
+
   // ── Phone — Verify OTP ───────────────────────────────────────────
   Future<String?> verifyOtp(String otp) async {
     if (_verificationId == null) return 'Please request OTP first';
@@ -161,13 +179,15 @@ Future<String?> sendOtp(String phoneNumber) async {
       final phone = user.phoneNumber ?? '';
       final exists = usersBox.values.any((u) => u.phone == phone);
       if (!exists) {
-        await usersBox.add(User(
-          name: 'User',
-          email: user.email ?? '',
-          passwordHash: '',
-          phone: phone,
-          securityAnswer: '',
-        ));
+        await usersBox.add(
+          User(
+            name: 'User',
+            email: user.email ?? '',
+            passwordHash: '',
+            phone: phone,
+            securityAnswer: '',
+          ),
+        );
       }
       await _saveUserLocally(user.email ?? phone);
       return null;
@@ -188,8 +208,9 @@ Future<String?> sendOtp(String phoneNumber) async {
   void refreshUser() {
     final email = Hive.box('settings').get('currentUser', defaultValue: '');
     if (email.isEmpty) return;
-    final matches =
-        Hive.box<User>('users').values.where((u) => u.email == email);
+    final matches = Hive.box<User>(
+      'users',
+    ).values.where((u) => u.email == email);
     if (matches.isNotEmpty) {
       _currentUser = matches.first;
       notifyListeners();
@@ -198,8 +219,9 @@ Future<String?> sendOtp(String phoneNumber) async {
 
   Future<void> _saveUserLocally(String email) async {
     await Hive.box('settings').put('currentUser', email);
-    final matches =
-        Hive.box<User>('users').values.where((u) => u.email == email);
+    final matches = Hive.box<User>(
+      'users',
+    ).values.where((u) => u.email == email);
     if (matches.isNotEmpty) {
       _currentUser = matches.first;
       notifyListeners();

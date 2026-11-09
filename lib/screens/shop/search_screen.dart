@@ -172,7 +172,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
                   ? _buildEmptyState(
                       context: context,
                       icon: Icons.search_rounded,
-                      title: 'Search QuickCart',
+                      title: 'Search Cartify',
                       subtitle:
                           'Find products by name, category\nor description',
                     )

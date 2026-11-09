@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/product.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class ProductProvider extends ChangeNotifier {
   List<Product> _products = [];
@@ -35,10 +36,16 @@ class ProductProvider extends ChangeNotifier {
     }).toList();
   }
 
-  /// Fetch products from Firestore once. Safe to call multiple times —
-  /// skips if already loaded.
+  /// Loads the cached catalogue immediately when available, then refreshes it
+  /// from Firestore when the network is available.
   Future<void> fetchProducts({bool force = false}) async {
     if (_products.isNotEmpty && !force) return;
+
+    final cache = Hive.box<Product>('products');
+    if (cache.isNotEmpty && _products.isEmpty) {
+      _products = cache.values.toList();
+      notifyListeners();
+    }
 
     _isLoading = true;
     _error = null;
@@ -49,23 +56,30 @@ class ProductProvider extends ChangeNotifier {
           .collection('products')
           .get();
 
-      _products = snap.docs.map((doc) {
+      final products = snap.docs.map((doc) {
         final data = doc.data();
         return Product(
           id: data['id'] as String? ?? doc.id,
           name: data['name'] as String? ?? '',
-          price: (data['price'] as num).toDouble(),
-          originalPrice: (data['originalPrice'] as num).toDouble(),
+          price: (data['price'] as num? ?? 0).toDouble(),
+          originalPrice: (data['originalPrice'] as num? ?? 0).toDouble(),
           imageUrl: data['imageUrl'] as String? ?? '',
           description: data['description'] as String? ?? '',
           category: data['category'] as String? ?? '',
-          stock: (data['stock'] as num).toInt(),
+          stock: (data['stock'] as num? ?? 0).toInt(),
         );
       }).toList();
 
+      await cache.clear();
+      for (final product in products) {
+        await cache.put(product.id, product);
+      }
+      _products = products;
       _error = null;
     } catch (e) {
-      _error = 'Failed to load products. Please try again.';
+      if (_products.isEmpty) {
+        _error = 'Products are unavailable offline. Connect and try again.';
+      }
     } finally {
       _isLoading = false;
       notifyListeners();

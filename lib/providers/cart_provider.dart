@@ -5,17 +5,20 @@ import '../models/product.dart';
 
 class CartProvider extends ChangeNotifier {
   Box<CartItem> get _box => Hive.box<CartItem>('cart');
+  String get _userEmail =>
+      Hive.box('settings').get('currentUser', defaultValue: '') as String;
 
-  List<CartItem> get items => _box.values.toList();
+  List<CartItem> get items =>
+      _box.values.where((item) => item.userEmail == _userEmail).toList();
 
-  int get itemCount => _box.length;
+  int get itemCount => items.length;
 
   double get total =>
       items.fold(0, (sum, item) => sum + (item.price * item.quantity));
 
   Future<void> addToCart(Product product) async {
     final existing = _box.values.cast<CartItem?>().firstWhere(
-      (item) => item?.productId == product.id,
+      (item) => item?.productId == product.id && item?.userEmail == _userEmail,
       orElse: () => null,
     );
 
@@ -31,6 +34,7 @@ class CartProvider extends ChangeNotifier {
           imageUrl: product.imageUrl,
           category: product.category,
           quantity: 1,
+          userEmail: _userEmail,
         ),
       );
     }
@@ -59,7 +63,9 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> clearCart() async {
-    await _box.clear();
+    for (final item in items.toList()) {
+      await item.delete();
+    }
     notifyListeners();
   }
 }
