@@ -19,6 +19,9 @@ migrate_working_dir/
 .idea/
 .vscode/
 .agents/
+android/app/google-services.json
+skills-lock.json
+lib/seed-folder/
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -46,3 +49,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local Firebase Admin credentials
+serviceAccountKey.json
+**/serviceAccountKey.json

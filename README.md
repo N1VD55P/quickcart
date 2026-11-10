@@ -94,7 +94,6 @@ lib/
 │   └── admin/                # Dashboard and seven admin sections
 ├── services/                 # Hive and authentication helpers
 ├── utils/                    # Validation and password helpers
-└── seed-folder/              # Optional Firestore catalogue seed script
 ```
 
 ### Data ownership
@@ -123,7 +122,6 @@ Install the following before running the project:
 - Android SDK and Android Studio or VS Code
 - Android emulator or physical Android device
 - A Firebase project with Authentication and Firestore enabled
-- Node.js only if using the optional seed script
 
 Check the local setup with:
 
@@ -158,21 +156,10 @@ dart run build_runner build --delete-conflicting-outputs
    android/app/google-services.json
    ```
 
-The project already contains a Firebase configuration file for the configured
-development project. Do not publish Firebase configuration or service-account
-credentials in a public repository.
-
-### Optional catalogue seed
-
-The optional seed script is located at `lib/seed-folder/seed.js`. Run it only
-after configuring the Firebase Admin SDK credentials locally:
-
-```bash
-cd lib/seed-folder
-node seed.js
-```
-
-Never commit `serviceAccountKey.json`.
+The Firebase configuration file is intentionally kept local and is ignored by
+Git. Download it from the Firebase console and place it at the path above
+before building the Android app. Never commit Firebase Admin SDK credentials,
+such as `serviceAccountKey.json`.
 
 ## Run on Android
 
