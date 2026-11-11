@@ -53,3 +53,11 @@ app.*.map.json
 # Local Firebase Admin credentials
 serviceAccountKey.json
 **/serviceAccountKey.json
+
+# Local academic evidence and private attachments
+Cartify_Evidence/screenshots/*
+Cartify_Evidence/recordings/*
+Cartify_Evidence/*.pdf
+Cartify_Evidence/*.apk
+!Cartify_Evidence/screenshots/.gitkeep
+!Cartify_Evidence/recordings/.gitkeep

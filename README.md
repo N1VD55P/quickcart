@@ -220,6 +220,7 @@ require manual or integration verification.
 
 Additional academic evidence is available in:
 
+- [Evidence package](Cartify_Evidence/README.md)
 - [Project documentation](docs/project_documentation.md)
 - [Academic audit](docs/cartify_software_engineering_academic_audit.docx)
 - [Project management evidence](docs/cartify_project_management_evidence.docx)

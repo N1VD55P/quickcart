@@ -1,0 +1,31 @@
+Analyzing quickcart...
+
+   info • The file name 'Product_Provider.dart' isn't a lower_case_with_underscores identifier. Try changing the name to follow the lower_case_with_underscores style • lib/providers/Product_Provider.dart:1:1 • file_names
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/coupons_tab.dart:283:35 • unnecessary_underscores
+   info • The parameter name 'sum' matches a visible type name. Try adding a name for the parameter or changing the parameter name to not match an existing type • lib/screens/admin/tabs/dashboard_tab.dart:35:12 • avoid_types_as_parameter_names
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/screens/admin/tabs/inventory_tab.dart:133:29 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/screens/admin/tabs/inventory_tab.dart:134:34 • curly_braces_in_flow_control_structures
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/inventory_tab.dart:247:43 • unnecessary_underscores
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/inventory_tab.dart:294:59 • unnecessary_underscores
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/inventory_tab.dart:294:63 • unnecessary_underscores
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/orders_tab.dart:82:39 • unnecessary_underscores
+   info • 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre. Try replacing the use of the deprecated member with the replacement • lib/screens/admin/tabs/orders_tab.dart:332:19 • deprecated_member_use
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/products_tab.dart:226:33 • unnecessary_underscores
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/products_tab.dart:292:41 • unnecessary_underscores
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/products_tab.dart:292:45 • unnecessary_underscores
+   info • 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre. Try replacing the use of the deprecated member with the replacement • lib/screens/admin/tabs/products_tab.dart:576:17 • deprecated_member_use
+   info • The parameter name 'sum' matches a visible type name. Try adding a name for the parameter or changing the parameter name to not match an existing type • lib/screens/admin/tabs/reviews_tab.dart:112:28 • avoid_types_as_parameter_names
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/reviews_tab.dart:239:45 • unnecessary_underscores
+   info • Statements in a for should be enclosed in a block. Try wrapping the statement in a block • lib/screens/admin/tabs/users_tab.dart:70:33 • curly_braces_in_flow_control_structures
+   info • Statements in a for should be enclosed in a block. Try wrapping the statement in a block • lib/screens/admin/tabs/users_tab.dart:77:36 • curly_braces_in_flow_control_structures
+   info • Statements in a for should be enclosed in a block. Try wrapping the statement in a block • lib/screens/admin/tabs/users_tab.dart:83:34 • curly_braces_in_flow_control_structures
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/admin/tabs/users_tab.dart:267:39 • unnecessary_underscores
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/screens/auth/signup_screen.dart:308:23 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/screens/auth/signup_screen.dart:310:23 • curly_braces_in_flow_control_structures
+   info • The private field _imageLoaded could be 'final'. Try making the field 'final' • lib/screens/shop/product_detail_screen.dart:25:8 • prefer_final_fields
+warning • The value of the field '_imageLoaded' isn't used. Try removing the field, or using it • lib/screens/shop/product_detail_screen.dart:25:8 • unused_field
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/shop/product_detail_screen.dart:187:25 • unnecessary_underscores
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/shop/product_detail_screen.dart:187:29 • unnecessary_underscores
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/shop/product_detail_screen.dart:234:39 • unnecessary_underscores
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/shop/search_screen.dart:338:43 • unnecessary_underscores
+   info • Unnecessary use of multiple underscores. Try using '_' • lib/screens/shop/search_screen.dart:338:47 • unnecessary_underscores

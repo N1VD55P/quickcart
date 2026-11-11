@@ -1,0 +1,87 @@
+07c16e1 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 38
+48eb09d Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 38 start
+a68c2ec Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 37
+0ae9c98 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 37 start
+6307c4a Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 36
+aca4ca5 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 36 start
+dc80de8 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 35
+638a4e3 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 35 start
+680b2d8 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 34
+8dbeca5 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 34 start
+e864988 Remove local-only project files
+5655d75 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 33
+0adeaee Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 33 start
+9d5151d Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 32
+b4a8864 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 32 start
+7e0d38a Prepare Cartify academic submission
+4875ff6 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 31
+34ac775 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 31 start
+37e2fa8 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 30
+b3c517d Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 30 start
+c16f5b5 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 29
+f505536 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 29 start
+4d00aa0 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 28
+4c6ed81 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 28 start
+2342870 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 27
+7334a94 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 27 start
+0d3930f Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 26
+98019ce Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 26 start
+81aa3d2 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 25
+16c0c7f Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 25 start
+b7214a9 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 24
+16afc97 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 24 start
+16898ee Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 23
+d4266d7 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 23 start
+3e7d2ed Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 22
+4aebb6f Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 22 start
+9ac1569 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 21
+c74274a Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 21 start
+59c02fb Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 20
+f7e2d02 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 20 start
+4004ebd Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 19
+15a45f7 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 19 start
+01907d5 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 18
+ec5ace8 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 18 start
+9e86924 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 17
+1f15ec7 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 17 start
+4f6deed Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 16
+41800b4 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 16 start
+2981617 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 15
+4459b22 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 15 start
+c370dd8 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 14
+f76d014 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 14 start
+74b35b1 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 13
+cc85acc Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 13 start
+6275cb3 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 12
+088f545 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 12 start
+b27aa7f Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 11
+0a6ff5a Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 11 start
+00277e2 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 10
+b2b63ae Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 10 start
+df37393 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 9
+5d108f4 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 9 start
+677c047 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 8
+56b69dc Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 8 start
+c226f4a Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 7
+020c526 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 7 start
+8d619ac Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 6
+d5e8af0 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 6 start
+2b496d3 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 5
+9270d7c Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 5 start
+cb3db39 fix some bugs in login
+5d22b68 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 4
+fe72f5f Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 4 start
+308fdef Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 3
+03f4387 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 3 start
+40562d5 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 2
+fe601d1 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 2 start
+893ab30 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 1
+3eb6585 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - turn 1 start
+67e81e2 Agent host session c5a46193-c8cb-4924-8399-e7f0ead0da2d - baseline checkpoint
+c48c8ab Revamp README with project details and setup guide
+7f7b4b3 date 1 aug
+56a9406 changes the colour schme of admin
+56206d6 added admin page
+373f718 final
+09d8b6d this
+681426c starting
