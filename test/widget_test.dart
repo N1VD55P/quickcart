@@ -26,6 +26,7 @@ void main() {
     test('validateEmail returns null for valid email', () {
       expect(Validators.validateEmail('desh@gmail.com'), isNull);
       expect(Validators.validateEmail('user.name@domain.co'), isNull);
+      expect(Validators.validateEmail('  user@domain.com  '), isNull);
     });
 
     test('validatePassword returns error for empty password', () {
@@ -46,6 +47,7 @@ void main() {
       expect(Validators.validatePhone('123'), isNotNull);
       expect(Validators.validatePhone(''), isNotNull);
       expect(Validators.validatePhone('12345678901'), isNotNull);
+      expect(Validators.validatePhone('98765abc10'), isNotNull);
     });
 
     test('validatePhone returns null for valid 10-digit phone', () {
@@ -101,10 +103,7 @@ void main() {
     });
 
     test('returns null when passwords match', () {
-      expect(
-        confirmPasswordValidator('password123', 'password123'),
-        isNull,
-      );
+      expect(confirmPasswordValidator('password123', 'password123'), isNull);
     });
   });
 

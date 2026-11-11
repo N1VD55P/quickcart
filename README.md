@@ -133,7 +133,7 @@ flutter devices
 ## Installation
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/N1VD55P/quickcart.git
 cd quickcart
 flutter pub get
 dart run build_runner build --delete-conflicting-outputs

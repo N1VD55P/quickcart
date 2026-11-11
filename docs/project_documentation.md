@@ -1,7 +1,12 @@
 # Cartify Project Documentation
 
 ## Project Overview
-Cartify is a Flutter storefront app that uses Hive for local persistence, Provider for cart state, and a feature-oriented screen structure. Firebase Authentication handles online identity, Cloud Firestore provides the product catalogue, and Hive stores the offline catalogue cache and local transactional data.
+Cartify is a Flutter storefront app that uses Hive for local persistence,
+Provider for cart state, and a feature-oriented screen structure. Firebase
+Authentication handles online identity, Cloud Firestore provides the product
+catalogue, and Hive stores the offline catalogue cache and local transactional
+data. Firebase configuration is supplied locally and is intentionally excluded
+from version control.
 
 ## Architecture
 The codebase is organized by feature instead of by a strict layered architecture.
@@ -38,7 +43,9 @@ The models are simple Hive objects with generated adapters. Firestore is the rem
 `SplashScreen` is a timed entry screen that waits two seconds and then navigates to `LoginScreen`. It is purely transitional and does not inspect authentication state before routing.
 
 #### Login Screen
-`LoginScreen` validates email and password, searches the Hive `users` box, compares a SHA-256 password hash, saves the signed-in email into `settings.currentUser`, and navigates to `HomeScreen`.
+`LoginScreen` validates email and password, attempts Firebase Authentication,
+falls back to the local Hive `users` box when Firebase is unavailable, saves
+the signed-in email into `settings.currentUser`, and navigates to `HomeScreen`.
 
 #### Signup Screen
 `SignupScreen` creates a user record in Hive after checking for duplicate email addresses. It stores name, email, password hash, and security answer. The confirm-password field is present in the UI and uses a validator, but the signup submit path itself does not enforce password matching separately.

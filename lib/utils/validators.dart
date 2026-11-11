@@ -8,15 +8,14 @@ class Validators {
   }
 
   static String? validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) {
+    final email = value?.trim();
+    if (email == null || email.isEmpty) {
       return "Email is required";
     }
 
-    final regex = RegExp(
-      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-    );
+    final regex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
-    if (!regex.hasMatch(value)) {
+    if (!regex.hasMatch(email)) {
       return "Invalid email";
     }
 
@@ -36,7 +35,7 @@ class Validators {
   }
 
   static String? validatePhone(String? value) {
-    if (value == null || value.length != 10) {
+    if (value == null || !RegExp(r'^\d{10}$').hasMatch(value)) {
       return "Enter valid phone number";
     }
 
