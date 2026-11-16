@@ -143,6 +143,117 @@ The app is driven by Hive boxes and direct UI reads.
 - Product reviews and average rating display.
 - Profile editing, password change, and account deletion.
 
+## Project Structure And Main Modules
+
+The project is organized as a Flutter Android application:
+
+```text
+lib/
+├── main.dart                 # Firebase, Hive and Provider bootstrap
+├── models/                   # Product, user, cart, order and profile models
+├── providers/                # Authentication, products, cart, profile and theme state
+├── screens/
+│   ├── auth/                 # Login, signup, phone auth and password recovery
+│   ├── shop/                 # Catalogue, search, product details, cart and checkout
+│   ├── orders/               # Order history, details and reorder
+│   ├── profile/              # Profile, addresses and account settings
+│   └── admin/                # Dashboard and store-management tabs
+├── services/                 # Authentication and Hive helpers
+└── utils/                    # Validation and password hashing
+```
+
+The main data path is `ProductProvider` -> Firestore catalogue -> Hive cache
+for products, while `CartProvider`, `ProfileProvider` and the order screens
+manage user-scoped local shopping data.
+
+## Required Demonstration Screenshots
+
+The following screenshots should be captured from the running Android app and
+attached to the academic submission. Use test accounts and hide email
+addresses, tokens, project identifiers and other private information:
+
+### Customer screens
+
+1. Login screen
+2. Signup screen
+3. Catalogue/home screen with products
+4. Product details screen
+5. Cart with quantity and total
+6. Checkout with address and coupon
+7. Order confirmation
+8. Order history and order details
+9. Profile and address book
+
+### Administrator screens
+
+Capture the admin dashboard and each of the seven tabs:
+
+1. Dashboard
+2. Products
+3. Orders
+4. Users
+5. Inventory
+6. Reviews
+7. Coupons
+
+Record each screenshot in
+[`Cartify_Evidence/evidence_index.md`](../Cartify_Evidence/evidence_index.md),
+including the test ID, date, device, steps and expected result.
+
+## Test Cases, Results And Devices
+
+Automated evidence is stored in the
+[`Cartify_Evidence/`](../Cartify_Evidence/) folder:
+
+- `evidence_flutter_test.txt` records 35 passing Flutter tests, including
+  validation, hashing, coupon calculations, local authentication, profile
+  persistence, theme persistence and user-scoped cart behavior.
+- `evidence_flutter_analyze.txt` records static analysis output. It contains
+  informational lints and warnings and should not be described as a
+  zero-warning analysis.
+- `evidence_devices.txt` records the device detected when the evidence command
+  was run. A new device output should be captured for each final submission
+  test session.
+- `manual_test_record.md` provides the required format for Firebase, Firestore,
+  checkout, admin, offline and Android-device tests.
+
+For each manual test, record the app version or commit, Android version,
+network state, steps, expected result, actual result, evidence filename and
+PASS/FAIL/BLOCKED status.
+
+## Implementation Challenges And Resolutions
+
+| Challenge | Resolution |
+|---|---|
+| Catalogue must remain usable when the network is unavailable | Products fetched from Firestore are cached in Hive and the cached data is retained when the remote request fails. |
+| Local shopping data could be mixed between accounts | Cart records are associated with the active user and cart totals and clearing are filtered by that user. |
+| Firebase configuration must not be published with the repository | `google-services.json` is supplied locally and ignored by Git; setup instructions are documented in the README. |
+| Product data needs to be manageable by an administrator | The admin Products tab provides Firestore-backed product create, update and delete operations. |
+| Evidence must distinguish automated and manual claims | Reproducible command output is stored separately from screenshot and manual-test templates in `Cartify_Evidence`. |
+| The application has a broad academic scope | Features were separated into authentication, catalogue, cart, checkout, orders, profile and admin modules with focused providers and screens. |
+
+These resolutions describe the implementation visible in the repository. Add
+team-specific challenges only when the team can support them with notes,
+commits, screenshots or test records.
+
+## Individual Team Contributions
+
+Replace the placeholders below with the actual names and contributions agreed
+by the team. Do not assign work based only on commit count; confirm each
+person's contribution with the team.
+
+| Team member | Contribution | Evidence |
+|---|---|---|
+| Member 1: __________________ | Project planning, feasibility/SRS/MoSCoW analysis and requirements traceability | Submitted reports, diagrams and `docs/` evidence |
+| Member 2: __________________ | Flutter customer flow: authentication, catalogue, product details, cart and checkout | Relevant source files, screenshots and manual test records |
+| Member 3: __________________ | Admin panel, Firebase/Firestore integration, testing, documentation and evidence packaging | Admin screenshots, test outputs and `Cartify_Evidence/` |
+
+### Contribution confirmation
+
+Each member should review the table, correct their row, and confirm the
+description before submission. Include the team's agreed names, dates and
+signatures if the college requires them.
+
 ## Current Limitations
 - Firebase configuration and Firestore access require an authenticated project at runtime.
 - The admin password is currently configured in the client and should be replaced with Firebase custom claims before production.
@@ -151,7 +262,9 @@ The app is driven by Hive boxes and direct UI reads.
 - No stock enforcement on add-to-cart or checkout.
 - No order fulfillment progression beyond the static status labels used in the UI.
 - No robust password policy or salted password storage.
-- No meaningful automated test coverage; `test/widget_test.dart` is empty.
+- Automated unit and local-persistence tests exist; Firebase, Firestore,
+  Android-device, performance and security claims still require manual or
+  integration evidence.
 - Real payment gateways, push notifications, multi-vendor support, and geo-fencing are outside the current scope.
 
 ## Suggested Improvements
