@@ -166,6 +166,77 @@ The main data path is `ProductProvider` -> Firestore catalogue -> Hive cache
 for products, while `CartProvider`, `ProfileProvider` and the order screens
 manage user-scoped local shopping data.
 
+## Hardware, Software And Development Environment
+
+The following environment details were captured from the development
+workspace on 16 November 2026. Storage values are rounded for reporting.
+
+### Development laptop
+
+| Component | Verified specification |
+|---|---|
+| Processor | Intel Core i7-14700HX |
+| CPU layout | 20 physical cores / 28 logical threads |
+| Memory | 16 GB RAM (approximately 15 GiB reported by the operating system) |
+| Storage | 512 GB-class NVMe SSD (473 GB mounted capacity reported) |
+| Operating system | CachyOS 7.3.4-1-cachyos, Linux |
+
+### Android test device
+
+| Component | Verified specification |
+|---|---|
+| Model/device identifier | I2403 |
+| Android version | Android 16 |
+| Connection record | Previously detected by Flutter as device `10BF1D0UJ0005KQ` |
+
+The Android phone was not connected during the environment capture on
+16 November 2026; therefore, the device row should be supported by the
+attached device screenshot or test log in the final submission.
+
+### Development software
+
+| Software | Version or detail |
+|---|---|
+| Flutter | 3.47.9, stable channel |
+| Dart | 3.13.7 |
+| DevTools | 2.60.0 |
+| IDE | Visual Studio Code (active workspace IDE) |
+| Android project support | Android Studio-compatible Gradle project |
+| Source control | Git and GitHub |
+| Repository | https://github.com/N1VD55P/quickcart |
+| Android application ID | `com.example.quickcart` |
+
+The repository includes Android Studio project metadata, but the verified
+active IDE for this development session was VS Code. If Android Studio was
+also used by a team member, record that member's IDE version separately
+instead of presenting it as the primary verified environment.
+
+## Development Methodology And Project Timeline
+
+The project followed an **iterative, feature-driven SDLC model**. Work was
+organized into short feature phases rather than a single Waterfall sequence:
+
+1. Requirements, feasibility and MoSCoW prioritization
+2. Flutter project setup, architecture and Hive data models
+3. Authentication, profiles and local persistence
+4. Firestore catalogue, search and product details
+5. Cart, wishlist, checkout and local orders
+6. Administrator dashboard and product management
+7. Testing, academic evidence, documentation and repository cleanup
+
+Git was used for source control throughout development, with the project
+published at
+[N1VD55P/quickcart](https://github.com/N1VD55P/quickcart). The repository
+history shows the first project commit on 19 July 2026 and the latest
+documentation/evidence work on 16 November 2026, giving an overall project
+period of approximately four months. This should be described as the calendar
+development period; individual implementation effort was distributed across
+the phases above.
+
+The project did not use formally numbered Scrum sprints. For the report, use
+the phase list above as the project's practical iteration structure unless the
+team has separate sprint records.
+
 ## Required Demonstration Screenshots
 
 The following screenshots should be captured from the running Android app and
@@ -244,9 +315,9 @@ person's contribution with the team.
 
 | Team member | Contribution | Evidence |
 |---|---|---|
-| Member 1: __________________ | Project planning, feasibility/SRS/MoSCoW analysis and requirements traceability | Submitted reports, diagrams and `docs/` evidence |
-| Member 2: __________________ | Flutter customer flow: authentication, catalogue, product details, cart and checkout | Relevant source files, screenshots and manual test records |
-| Member 3: __________________ | Admin panel, Firebase/Firestore integration, testing, documentation and evidence packaging | Admin screenshots, test outputs and `Cartify_Evidence/` |
+| Member 1: Neil jain | Project planning and requirements traceability | Submitted reports, diagrams and `docs/` evidence |
+| Member 2: Navdeep Singh | Flutter customer flow: authentication, catalogue, product details, feasibility/SRS/MoSCoW analysis cart and checkout | Relevant source files, screenshots |
+| Member 3: Nihit | Admin panel, Firebase/Firestore integration, testing, documentation and evidence packaging | Admin screenshots, test outputs and `Cartify_Evidence/` |
 
 ### Contribution confirmation
 

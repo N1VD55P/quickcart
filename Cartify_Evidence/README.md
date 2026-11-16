@@ -15,6 +15,9 @@ screenshots and Firebase Console records.
    date, device and result.
 5. Export the completed index and test records as PDF for submission.
 
+Environment and methodology details are recorded in
+[environment_and_methodology.md](environment_and_methodology.md).
+
 Do not store passwords, service-account keys, access tokens or
 `google-services.json` in this folder.
 
