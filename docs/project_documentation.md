@@ -276,6 +276,9 @@ including the test ID, date, device, steps and expected result.
 Automated evidence is stored in the
 [`Cartify_Evidence/`](../Cartify_Evidence/) folder:
 
+The complete academic testing section is available in
+[`TESTING_DOCUMENTATION.md`](../TESTING_DOCUMENTATION.md).
+
 - `evidence_flutter_test.txt` records 35 passing Flutter tests, including
   validation, hashing, coupon calculations, local authentication, profile
   persistence, theme persistence and user-scoped cart behavior.
